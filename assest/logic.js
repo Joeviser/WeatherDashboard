@@ -20,10 +20,9 @@ const cities = [];
 function getDay (){
     const today = dayjs();
     const now= dayjs().format("DD/MM/YYYY ");
-    console.log(now);
    return now;
 }
-
+getRecentSearches();
 
 function searchCityWeather(city){
   
@@ -31,8 +30,6 @@ function searchCityWeather(city){
     const APIKey="b932f77c6ae6439148050eb1af45904f";
     const queryUrlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`;
 
-
-    console.log(queryUrlWeather);
 
     fetch(queryUrlWeather)
         .then(function(response){
@@ -85,7 +82,32 @@ function renderCities(input) {
     })
   }
 
-  
+  // Get Recent Searches from localStorage
+	function getRecentSearches() {
+        var searches = JSON.parse(localStorage.getItem("searches"));
+        if (searches != null) {
+          for (var i = 0; i < searches.length; i++) {
+            //Create Button Element with data in localStorage
+             const b = $("<button>");
+            // Adding a class of city-btn to our button
+            b.addClass("cityBtn");
+            // Adding a data-attribute
+            b.attr("data-name", city);
+             // Providing the initial button text
+            b.text(searches[i]);
+            // Append to List
+            $("#recent-searches-list").prepend(b);
+          }
+         $("#recent-searches").show();
+        } else {
+          $("#recent-searches").hide();
+        }
+      }
+      //Clear localStorage when click Button Clear and empty recent-search-list 
+      $("#clearBtn").on("click", function() {
+          localStorage.clear();
+          $("#recent-searches-list").empty();
+      });
 
 // Event handler for user clicking the search city button
 $("#searchBtn").on("click", function (event) {
@@ -94,9 +116,16 @@ $("#searchBtn").on("click", function (event) {
     // Storing the city name
     const inputCity = $("#userInput").val().trim();
     
-    if (inputCity == "") {
+    //user input is empty nothing happend
+    if (inputCity == "" ){
         return;
-      } else {
+    }else {
+        //Repeat cities no added to the search
+        for (var i = 0; i < cities.length; i++){
+            if (cities[i]===inputCity)
+                return;
+            }
+      } 
 
         city.text("City: " +inputCity + " (" +getDay()+") ");
 
@@ -107,7 +136,7 @@ $("#searchBtn").on("click", function (event) {
         renderCities(inputCity);
     // Running the searchCity function(passing in the city as an argument)
         searchCityWeather(inputCity);
-    }
+    //}
   });
 
 
