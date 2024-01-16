@@ -52,9 +52,47 @@ function searchCityWeather(city){
             // Empty the contents of the currentDay div, append the new city content
              $("#current").empty();
              $("#current").append(icon,temperature,wind,humidity);
+
+
+            //  fiveDay.empty();
+
+            //  console.log(data);
+            //  var dailyArray =data;
+            //  console.log(dailyArray);
+            //  for (var i =0; i<5;i++){
+            //     var iconCode=dailyArray[i].weather[0].icon;
+            //      var iconurl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
+            //      fetch(iconurl)
+            //      .then(data => {
+            //          $('#fiveDayIcon').attr('src', data.url);
+     
+            //      });
+    
+            //      cards(getDay(), data[i].main.temp,
+            //            data[i].wind.speed, data[i].main.humidity);
+            //  }
+            // });
   })
 };
 
+
+
+
+// Create cards
+
+function cards (date,icon,temp,windSpeed,humidity){
+    
+    fiveDay.append(`
+    <div class="card d-inline-flex mx-3" style="width: 13rem;border-radius: 20px;background-color:black;">
+        <div class="card-body text-center" id='fiverCards'>
+             <h5 class="card-title" id='card-title'>${date}</h5>
+            <img id ='fiveDayIcon'src=${icon}>
+            <h6 class="card-subtitle mb-2 text-muted" id ='temps'>High: ${temp}</h6>
+            <h6 class="card-subtitle mb-2 text-muted" id ='cardinfo'>Wind: ${windSpeed}</h6>
+            <h6 class="card-subtitle mb-2 text-muted" id ='cardinfo'>Humidity: ${humidity}</h6>
+         </div>
+    </div>`);
+};
 
 // Function for displaying city data
 function renderCities(input) {
@@ -136,7 +174,8 @@ $("#searchBtn").on("click", function (event) {
         renderCities(inputCity);
     // Running the searchCity function(passing in the city as an argument)
         searchCityWeather(inputCity);
-    //}
+        
+    
   });
 
 
@@ -163,9 +202,5 @@ $("#cityBtn").on("click", function (event) {
      console.log(inputCity);
      searchCityWeather(input);
 });
-//$(inputCity).on("click", "cityBtn", searchCityWeather);
-
-// Calling the renderCities function to display the initial cities
-//renderCities();
 
 
