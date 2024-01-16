@@ -60,8 +60,8 @@ function searchCityWeather(city){
 
 
 // Function for displaying city data
-function renderCities() {
-
+function renderCities(input) {
+    $("#recent-searches").show();
     // Deleting the cities prior to adding new cities
     // (this is necessary otherwise you will have repeat buttons)
     $("#recent-searches-list").empty();
@@ -80,10 +80,12 @@ function renderCities() {
       a.text(city);
       // Adding the button to the recent-searches-list div
       $("#recent-searches-list").append(a);
+      // Save to localStorage
+        localStorage.setItem("searches", JSON.stringify(cities));
     })
   }
 
-
+  
 
 // Event handler for user clicking the search city button
 $("#searchBtn").on("click", function (event) {
@@ -91,17 +93,25 @@ $("#searchBtn").on("click", function (event) {
     event.preventDefault();
     // Storing the city name
     const inputCity = $("#userInput").val().trim();
-    //now= setInterval(getDay,1000);
-    city.text("City: " +inputCity + " (" +getDay()+") ");
+    
+    if (inputCity == "") {
+        return;
+      } else {
 
-     // Adding city from the textbox to our array of cities
-    cities.push(inputCity);
+        city.text("City: " +inputCity + " (" +getDay()+") ");
+
+        // Adding city from the textbox to our array of cities
+        cities.push(inputCity);
 
     // Calling renderButtons which handles the processing of our cities array
-    renderCities();
+        renderCities(inputCity);
     // Running the searchCity function(passing in the city as an argument)
-    searchCityWeather(inputCity);
+        searchCityWeather(inputCity);
+    }
   });
+
+
+  
 
   // Adding a click event listener to all elements with a class of "cityBtn"
 
@@ -128,4 +138,5 @@ $("#cityBtn").on("click", function (event) {
 
 // Calling the renderCities function to display the initial cities
 //renderCities();
+
 
